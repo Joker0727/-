@@ -1,0 +1,22 @@
+接口测试：
+http://nlp.baebos.com/test1_form.php
+
+http://nlp.baebos.com/test1.php?v=1
+
+接口地址v1：
+http://nlp.baebos.com/test1.php?v=1&key=531af6f4
+ ***** 唯一参数名：wenzhang 请求方式 POST
+ ***** wenzhang 最大长度 15000 汉字
+ ***** 成功返回语义重写的内容，错误则返回：系统错误
+ ***** 加上参数 sw=1 系统会识别名词并锁定不做处理
+
+
+使用次数查询：
+http://nlp.baebos.com/test1.php?count=1
+
+总数量查询
+http://nlp.baebos.com/test1.php?count=2
+
+剩余次数查询：
+http://nlp.baebos.com/test1.php?count=3
+
