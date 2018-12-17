@@ -44,6 +44,8 @@ namespace ArticleConversionTool
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!IsAuthorised())
+                return;
             folderPath = this.textBox1.Text;
             targetPath = this.textBox2.Text;
             if (string.IsNullOrEmpty(folderPath) || string.IsNullOrEmpty(targetPath))
@@ -51,8 +53,9 @@ namespace ArticleConversionTool
                 MessageBox.Show("目录不能为空！", "Article Conversion Tool");
                 return;
             }
-
-            ReadAllFolder();
+            Thread th = new Thread(ReadAllFolder);
+            th.IsBackground = true;
+            th.Start();
         }
 
         public void ReadAllFolder()
@@ -111,6 +114,7 @@ namespace ArticleConversionTool
                     {
                         imgPath = folder + @"\" + resStr;
                         builder.InsertImage(imgPath);
+                        builder.Write("\r\n");
                     }
                 }
                 catch (Exception ex)
@@ -281,6 +285,8 @@ namespace ArticleConversionTool
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (!IsAuthorised())
+                return;
             folderPath = this.textBox5.Text;
             wordPath = this.textBox4.Text;
             if (string.IsNullOrEmpty(wordPath) || string.IsNullOrEmpty(folderPath))
@@ -332,7 +338,7 @@ namespace ArticleConversionTool
                         index++;
                     }
                 }
-                doc.Save(wordPath);             
+                doc.Save(wordPath);
                 WordToTxt(wordPath, oldFolder);
             }
         }
@@ -344,7 +350,7 @@ namespace ArticleConversionTool
             File.WriteAllText(oldFolder + @"\内容.txt", newContent);
         }
 
-        public void WordToHtm(string wordPath,string oldFolder,string wordTitle)
+        public void WordToHtm(string wordPath, string oldFolder, string wordTitle)
         {
             var fi = new FileInfo(wordPath);
             var doc = new Document(fi.FullName);
@@ -353,7 +359,7 @@ namespace ArticleConversionTool
                 ExportTextInputFormFieldAsText = false,
                 ExportImagesAsBase64 = true
             };
-            doc.Save(oldFolder+@"\"+ wordTitle+".html", options);
+            doc.Save(oldFolder + @"\" + wordTitle + ".html", options);
         }
     }
 }

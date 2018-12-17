@@ -38,11 +38,11 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -152,6 +152,23 @@
             this.tabPage2.Text = "还原成txt";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(66, 45);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(227, 21);
+            this.textBox5.TabIndex = 4;
+            this.textBox5.Click += new System.EventHandler(this.textBox_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 12);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "原文目录";
+            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(381, 158);
@@ -164,7 +181,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(67, 36);
+            this.textBox4.Location = new System.Drawing.Point(66, 15);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(228, 21);
             this.textBox4.TabIndex = 1;
@@ -173,28 +190,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 39);
+            this.label4.Location = new System.Drawing.Point(7, 18);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 12);
             this.label4.TabIndex = 0;
             this.label4.Text = "Word目录";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 12);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 12);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "原文目录";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(67, 9);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(227, 21);
-            this.textBox5.TabIndex = 4;
-            this.textBox5.Click += new System.EventHandler(this.textBox_Click);
             // 
             // Form1
             // 

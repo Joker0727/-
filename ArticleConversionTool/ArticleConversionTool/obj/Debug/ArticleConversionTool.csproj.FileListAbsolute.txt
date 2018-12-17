@@ -21,3 +21,16 @@ E:\Private\文章转换工具要求\ArticleConversionTool\ArticleConversionTool\
 E:\Private\文章转换工具要求\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.ResolveComReference.cache
 E:\Private\文章转换工具要求\ArticleConversionTool\ArticleConversionTool\bin\Debug\RestSharp.dll
 E:\Private\文章转换工具要求\ArticleConversionTool\ArticleConversionTool\bin\Debug\RestSharp.xml
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.exe.config
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.exe
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.pdb
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\RestSharp.dll
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\RestSharp.xml
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.ResolveComReference.cache
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.Form1.resources
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.Properties.Resources.resources
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.GenerateResource.cache
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.CoreCompileInputs.cache
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.CopyComplete
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.exe
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.pdb
