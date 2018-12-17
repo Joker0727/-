@@ -30,6 +30,14 @@ namespace ArticleConversionTool
         public string folderPath = string.Empty;
         public string targetPath = string.Empty;
         public string wordPath = string.Empty;
+        public string htmPath = string.Empty;
+        public string txtPath = string.Empty;
+        public Thread th1 = null;
+        public Thread th2 = null;
+        public int folderTotalCount = 0;
+        public int wordTotalCount = 0;
+        public int currentfolderCount = 0;
+        public int currentWordCount = 0;
 
         public Form1()
         {
@@ -45,23 +53,44 @@ namespace ArticleConversionTool
         private void button1_Click(object sender, EventArgs e)
         {
             if (!IsAuthorised())
-                return;
-            folderPath = this.textBox1.Text;
-            targetPath = this.textBox2.Text;
-            if (string.IsNullOrEmpty(folderPath) || string.IsNullOrEmpty(targetPath))
             {
-                MessageBox.Show("目录不能为空！", "Article Conversion Tool");
+                MessageBox.Show("网络异常！", "Article Conversion Tool");
                 return;
             }
-            Thread th = new Thread(ReadAllFolder);
-            th.IsBackground = true;
-            th.Start();
+            string btnText = this.button1.Text;
+            if (btnText == "开始")
+            {
+                this.button1.Text = "暂停";
+                folderPath = this.textBox1.Text;
+                targetPath = this.textBox2.Text;
+
+                if (string.IsNullOrEmpty(folderPath) || string.IsNullOrEmpty(targetPath))
+                {
+                    MessageBox.Show("目录不能为空！", "Article Conversion Tool");
+                    return;
+                }
+                if (th1 == null)
+                {
+                    th1 = new Thread(ReadAllFolder);
+                    th1.IsBackground = true;
+                    th1.Start();
+                }
+                else
+                {
+                    th1?.Resume();
+                }            
+            }
+            else
+            {
+                this.button1.Text = "开始";
+                th1?.Suspend();             
+            }
         }
 
         public void ReadAllFolder()
         {
             string[] folderArr = Directory.GetDirectories(folderPath);
-
+            folderTotalCount = folderArr.Length;
             foreach (var folder in folderArr)
             {
                 try
@@ -87,44 +116,68 @@ namespace ArticleConversionTool
                 return;
             DirectoryInfo dir = new DirectoryInfo(folder);
             string wordTitle = dir.Name;
-            List<string> imgNameList = myUtils.GetImgs(folder);
-            string contentStr = File.ReadAllText(contentPath);
-            string newcontent = UseApi(contentStr);
-            if (string.IsNullOrEmpty(newcontent))
-                newcontent = contentStr;
-            string[] contentArr = myUtils.SplitByStr(newcontent, "\n");
-
-            Document doc = new Document();
-            DocumentBuilder builder = new DocumentBuilder(doc);
-            Font font = builder.Font;
-            if (wordTitle.Length > 30 || wordTitle.Length < 6)
-                font.Color = Color.Red;
-            builder.Writeln(wordTitle);
-            font.Color = Color.Black;
-            foreach (var content in contentArr)
+            try
             {
-                try
+                List<string> imgNameList = myUtils.GetImgs(folder);
+                string contentStr = File.ReadAllText(contentPath);
+                string newcontent = UseApi(contentStr);
+                if (string.IsNullOrEmpty(newcontent))
+                    newcontent = contentStr;
+                string[] contentArr = myUtils.SplitByStr(newcontent, "\n");
+
+                Document doc = new Document();
+                DocumentBuilder builder = new DocumentBuilder(doc);
+                Font font = builder.Font;
+                if (wordTitle.Length > 30 || wordTitle.Length < 6)
+                    font.Color = Color.Red;
+                builder.Writeln(wordTitle);
+                font.Color = Color.Black;
+                foreach (var content in contentArr)
                 {
-                    string resStr = CheckIsImage(imgNameList, content);
-                    if (string.IsNullOrEmpty(resStr))
+                    try
                     {
-                        builder.Writeln(content);
+                        string resStr = CheckIsImage(imgNameList, content);
+                        if (string.IsNullOrEmpty(resStr))
+                        {
+                            builder.Writeln(content);
+                        }
+                        else
+                        {
+                            imgPath = folder + @"\" + resStr;
+                            builder.InsertImage(imgPath);
+                            builder.Write("\r\n");
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        imgPath = folder + @"\" + resStr;
-                        builder.InsertImage(imgPath);
-                        builder.Write("\r\n");
+                        myUtils.WriteLog("插入文字或者图片时出错" + ex);
                     }
                 }
-                catch (Exception ex)
+                string savePath = targetPath + @"\" + wordTitle + ".docx";
+                doc.Save(savePath);
+                ChangeWordColor(savePath);
+                this.dataGridView1.Invoke(new Action(() =>
                 {
-                    myUtils.WriteLog("插入文字或者图片时出错" + ex);
-                }
+                    this.dataGridView1.Rows.Add(wordTitle, "成功");
+                    this.dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells["Column2"].Style.ForeColor = Color.Blue;
+                    this.dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Index;
+                }));
+                currentfolderCount++;
+                this.label9.Invoke(new Action(() =>
+                {
+                    this.label9.Text = currentfolderCount + "/" + folderTotalCount;
+                }));
             }
-            string savePath = targetPath + @"\" + wordTitle + ".docx";
-            doc.Save(savePath);
-            ChangeWordColor(savePath);
+            catch (Exception ex)
+            {
+                this.dataGridView1.Invoke(new Action(() =>
+                {
+                    this.dataGridView1.Rows.Add(wordTitle, "失败");
+                    this.dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells["Column2"].Style.ForeColor = Color.Red;
+                    this.dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Index;
+                    myUtils.WriteLog(ex);
+                }));
+            }
         }
         /// <summary>
         /// 修改敏感词的颜色
@@ -192,7 +245,7 @@ namespace ArticleConversionTool
             {
                 try
                 {
-                    if (str.Contains(imageName))
+                    if (str.Contains(imageName) || str.Contains(@":\"))
                         return imageName;
                 }
                 catch (Exception ex)
@@ -286,16 +339,39 @@ namespace ArticleConversionTool
         private void button2_Click(object sender, EventArgs e)
         {
             if (!IsAuthorised())
-                return;
-            folderPath = this.textBox5.Text;
-            wordPath = this.textBox4.Text;
-            if (string.IsNullOrEmpty(wordPath) || string.IsNullOrEmpty(folderPath))
             {
-                MessageBox.Show("目录不能为空！", "Article Conversion Tool");
+                MessageBox.Show("网络异常！", "Article Conversion Tool");
                 return;
             }
-            ReadAllWordPath();
-            DealWord();
+            string btnText = this.button2.Text;
+            if (btnText == "开始")
+            {
+                this.button2.Text = "暂停";
+                folderPath = this.textBox5.Text;
+                wordPath = this.textBox4.Text;
+                htmPath = this.textBox6.Text;
+                txtPath = this.textBox7.Text;
+                if (string.IsNullOrEmpty(wordPath) || string.IsNullOrEmpty(folderPath))
+                {
+                    MessageBox.Show("目录不能为空！", "Article Conversion Tool");
+                    return;
+                }
+                if (th2 == null)
+                {
+                    th2 = new Thread(ReadAllWordPath);
+                    th2.IsBackground = true;
+                    th2.Start();
+                }
+                else
+                {
+                    th2?.Resume();
+                }
+            }
+            else
+            {
+                this.button2.Text = "开始";
+                th2?.Suspend();
+            }
         }
 
         public void ReadAllWordPath()
@@ -309,6 +385,8 @@ namespace ArticleConversionTool
                     wordPathList.Add(wordPath);
                 }
             }
+            wordTotalCount = wordPathList.Count();
+            DealWord();
         }
 
         public void DealWord()
@@ -320,37 +398,76 @@ namespace ArticleConversionTool
                 NodeCollection shapes = doc.GetChildNodes(NodeType.Shape, true);
                 FileInfo fileInfo = new FileInfo(wordPath);
                 string wordTitle = fileInfo.Name.Replace(fileInfo.Extension, "");
-                string oldFolder = folderPath + @"\" + wordTitle;
-                WordToHtm(wordPath, oldFolder, wordTitle);
-                List<string> imgList = myUtils.GetImgs(oldFolder, 2);
-                int index = 0;
-                foreach (Aspose.Words.Drawing.Shape item in shapes)
+                try
                 {
-                    if (item.HasImage)
-                    {
-                        //Document imgDoc = item.Document as Document;
-                        //builder = new DocumentBuilder(imgDoc);
 
-                        //将光标移动到指定节点，移动到这个节点才可以把内容插入到这里
-                        builder.MoveTo(item.NextSibling);
-                        builder.Writeln(imgList[index]);
-                        item.Remove();
-                        index++;
+                    string oldFolder = folderPath + @"\" + wordTitle;
+                    List<string> imgList = myUtils.GetImgs(oldFolder, 2);
+                    WordToHtm(wordPath, oldFolder, wordTitle, imgList);
+                    int index = 0;
+                    foreach (Aspose.Words.Drawing.Shape item in shapes)
+                    {
+                        if (item.HasImage)
+                        {
+                            //Document imgDoc = item.Document as Document;
+                            //builder = new DocumentBuilder(imgDoc);
+
+                            //将光标移动到指定节点，移动到这个节点才可以把内容插入到这里
+                            builder.MoveTo(item);
+                            builder.Writeln(imgList[index]);
+                            item.Remove();
+                            index++;
+                        }
                     }
+                    doc.Save(wordPath);
+                    WordToTxt(wordPath, oldFolder, wordTitle);
+                    this.dataGridView2.Invoke(new Action(() =>
+                    {
+                        this.dataGridView2.Rows.Add(wordTitle, "成功");
+                        this.dataGridView2.Rows[dataGridView2.Rows.Count - 2].Cells["Column4"].Style.ForeColor = Color.Blue;
+                        this.dataGridView2.FirstDisplayedScrollingRowIndex = dataGridView2.Rows[dataGridView2.Rows.Count - 2].Index;
+                    }));
+                    currentWordCount++;
+                    this.label10.Invoke(new Action(() =>
+                    {
+                        this.label10.Text = currentWordCount + "/" + wordTotalCount;
+                    }));
                 }
-                doc.Save(wordPath);
-                WordToTxt(wordPath, oldFolder);
+                catch (Exception ex)
+                {
+                    this.dataGridView2.Invoke(new Action(() =>
+                    {
+                        this.dataGridView2.Rows.Add(wordTitle, "失败");
+                        this.dataGridView2.Rows[dataGridView2.Rows.Count - 2].Cells["Column4"].Style.ForeColor = Color.Blue;
+                        this.dataGridView2.FirstDisplayedScrollingRowIndex = dataGridView2.Rows[dataGridView2.Rows.Count - 2].Index;
+                    }));
+                    myUtils.WriteLog(ex);
+                }
             }
+            MessageBox.Show("htm已经转换完毕！", "Article Conversion Tool");
         }
-        public void WordToTxt(string newWordPath, string oldFolder)
+        public void WordToTxt(string newWordPath, string oldFolder, string wordTitle)
         {
             Document doc = new Document(newWordPath);
             string newContent = doc.GetText();
             newContent = newContent.Replace("\r", "\r\n");
-            File.WriteAllText(oldFolder + @"\内容.txt", newContent);
+
+            string parentPath = txtPath + $@"\{wordTitle}\";
+            if (!Directory.Exists(parentPath))
+                Directory.CreateDirectory(parentPath);
+            string[] oldPathArr = Directory.GetFiles(oldFolder);
+            foreach (var oldPath in oldPathArr)
+            {
+                FileInfo fileInfo = new FileInfo(oldPath);
+                string newFullPath = Path.Combine(parentPath, fileInfo.Name);
+                if (File.Exists(newFullPath))
+                    File.Delete(newFullPath);
+                fileInfo.CopyTo(newFullPath);
+            }
+            File.WriteAllText(parentPath + "内容.txt", newContent);
         }
 
-        public void WordToHtm(string wordPath, string oldFolder, string wordTitle)
+        public void WordToHtm(string wordPath, string oldFolder, string wordTitle, List<string> imgPathList)
         {
             var fi = new FileInfo(wordPath);
             var doc = new Document(fi.FullName);
@@ -359,7 +476,18 @@ namespace ArticleConversionTool
                 ExportTextInputFormFieldAsText = false,
                 ExportImagesAsBase64 = true
             };
-            doc.Save(oldFolder + @"\" + wordTitle + ".html", options);
+            string parentFolder = htmPath + $@"\{wordTitle}\";
+            if (!Directory.Exists(parentFolder))
+                Directory.CreateDirectory(parentFolder);
+            doc.Save(parentFolder + wordTitle + ".htm", options);
+            foreach (var imgPath in imgPathList)
+            {
+                FileInfo fileInfo = new FileInfo(imgPath);
+                string newFullPath = Path.Combine(parentFolder, fileInfo.Name);
+                if (File.Exists(newFullPath))
+                    File.Delete(newFullPath);
+                fileInfo.CopyTo(newFullPath);
+            }
         }
     }
 }
