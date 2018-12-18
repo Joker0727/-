@@ -1,6 +1,7 @@
 ﻿using Aspose.Words;
 using Aspose.Words.Replacing;
 using Aspose.Words.Saving;
+using HtmlAgilityPack;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -78,12 +79,12 @@ namespace ArticleConversionTool
                 else
                 {
                     th1?.Resume();
-                }            
+                }
             }
             else
             {
                 this.button1.Text = "开始";
-                th1?.Suspend();             
+                th1?.Suspend();
             }
         }
 
@@ -120,10 +121,11 @@ namespace ArticleConversionTool
             {
                 List<string> imgNameList = myUtils.GetImgs(folder);
                 string contentStr = File.ReadAllText(contentPath);
-                string newcontent = UseApi(contentStr);
-                if (string.IsNullOrEmpty(newcontent))
-                    newcontent = contentStr;
-                string[] contentArr = myUtils.SplitByStr(newcontent, "\n");
+                string newcontent = string.Empty;
+                //newcontent = UseApi(contentStr);
+                //if (string.IsNullOrEmpty(newcontent))
+                newcontent = contentStr;
+                string[] contentArr = myUtils.SplitByStr(newcontent, "\r\n");
 
                 Document doc = new Document();
                 DocumentBuilder builder = new DocumentBuilder(doc);
@@ -382,6 +384,8 @@ namespace ArticleConversionTool
                 FileInfo fileInfo = new FileInfo(wordPath);
                 if (fileInfo.Extension.ToLower() == ".docx" || fileInfo.Extension.ToLower() == ".doc")
                 {
+                    if (fileInfo.Name.Contains("~$"))
+                        continue;
                     wordPathList.Add(wordPath);
                 }
             }
@@ -479,15 +483,26 @@ namespace ArticleConversionTool
             string parentFolder = htmPath + $@"\{wordTitle}\";
             if (!Directory.Exists(parentFolder))
                 Directory.CreateDirectory(parentFolder);
-            doc.Save(parentFolder + wordTitle + ".htm", options);
+            string newHtmPath = parentFolder + wordTitle + ".htm";
+            doc.Save(newHtmPath, options);
+            string htmStr = File.ReadAllText(newHtmPath);
+            int index = 0;
+            HtmlAgilityPack.HtmlDocument doch = new HtmlAgilityPack.HtmlDocument();
+            doch.LoadHtml(htmStr);
+
+            HtmlNodeCollection imgList = doch.DocumentNode.SelectNodes("//img");
+
             foreach (var imgPath in imgPathList)
             {
+                index++;
                 FileInfo fileInfo = new FileInfo(imgPath);
-                string newFullPath = Path.Combine(parentFolder, fileInfo.Name);
+                string newFullPath = Path.Combine(parentFolder, $"{wordTitle}_{index}.jpg");
                 if (File.Exists(newFullPath))
                     File.Delete(newFullPath);
                 fileInfo.CopyTo(newFullPath);
+                imgList[index - 1].SetAttributeValue("src", newFullPath);
             }
+            doch.Save(newHtmPath);
         }
     }
 }
