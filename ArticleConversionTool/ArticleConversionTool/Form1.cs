@@ -247,7 +247,7 @@ namespace ArticleConversionTool
             {
                 try
                 {
-                    if (str.Contains(imageName) || str.Contains(@":\"))
+                    if (str.Contains(imageName))
                         return imageName;
                 }
                 catch (Exception ex)
