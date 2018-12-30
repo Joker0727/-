@@ -11,3 +11,17 @@ E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debu
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.CopyComplete
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.exe
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.pdb
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.exe.config
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.exe
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.pdb
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\RestSharp.dll
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\RestSharp.xml
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.ResolveComReference.cache
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.Form1.resources
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.Properties.Resources.resources
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.GenerateResource.cache
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.CoreCompileInputs.cache
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.CopyComplete
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.exe
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.pdb
+E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csprojAssemblyReference.cache
