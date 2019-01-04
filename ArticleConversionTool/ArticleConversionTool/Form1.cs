@@ -39,6 +39,8 @@ namespace ArticleConversionTool
         public int wordTotalCount = 0;
         public int currentfolderCount = 0;
         public int currentWordCount = 0;
+        public string errorFolder1 = AppDomain.CurrentDomain.BaseDirectory + @"ErrorFolder1\";
+        public string errorFolder2 = AppDomain.CurrentDomain.BaseDirectory + @"ErrorFolder2\";
 
         public Form1()
         {
@@ -177,8 +179,11 @@ namespace ArticleConversionTool
                     this.dataGridView1.Rows.Add(wordTitle, "失败");
                     this.dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells["Column2"].Style.ForeColor = Color.Red;
                     this.dataGridView1.FirstDisplayedScrollingRowIndex = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Index;
-                    myUtils.WriteLog(ex);
                 }));
+                myUtils.WriteLog(ex);
+                if (!Directory.Exists(errorFolder1))
+                    Directory.CreateDirectory(errorFolder1);
+                dir.MoveTo(errorFolder1 + dir.Name);
             }
         }
         /// <summary>
@@ -455,6 +460,9 @@ namespace ArticleConversionTool
                         this.dataGridView2.FirstDisplayedScrollingRowIndex = dataGridView2.Rows[dataGridView2.Rows.Count - 2].Index;
                     }));
                     myUtils.WriteLog(ex);
+                    if (!Directory.Exists(errorFolder2))
+                        Directory.CreateDirectory(errorFolder2);
+                    fileInfo.MoveTo(errorFolder2 + fileInfo.Name);
                 }
             }
             MessageBox.Show("htm已经转换完毕！", "Article Conversion Tool");
@@ -511,7 +519,9 @@ namespace ArticleConversionTool
                 fileInfo.CopyTo(newFullPath);
                 imgList[index - 1].SetAttributeValue("src", newFullPath);
             }
-            doch.Save(newHtmPath);
+            HtmlNode divNode = doch.DocumentNode.SelectSingleNode("//div");
+            string newHtmStr = divNode.InnerHtml;
+            File.WriteAllText(newHtmPath, newHtmStr,Encoding.GetEncoding("GB2312"));
         }
     }
 }
