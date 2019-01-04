@@ -11,3 +11,4 @@ E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debu
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.CopyComplete
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.exe
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.pdb
+E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csprojAssemblyReference.cache

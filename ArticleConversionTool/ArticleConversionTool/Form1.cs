@@ -265,18 +265,27 @@ namespace ArticleConversionTool
         public bool IsAuthorised()
         {
             string conStr = "Server=111.230.149.80;DataBase=MyDB;uid=sa;pwd=1add1&one";
-            using (SqlConnection con = new SqlConnection(conStr))
+            bool bo = false;
+            try
             {
-                string sql = string.Format("select count(*) from MyWork Where WorkId ='{0}'", workId);
-                using (SqlCommand cmd = new SqlCommand(sql, con))
+                using (SqlConnection con = new SqlConnection(conStr))
                 {
-                    con.Open();
-                    int count = int.Parse(cmd.ExecuteScalar().ToString());
-                    if (count > 0)
-                        return true;
+                    string sql = string.Format("select count(*) from MyWork Where IsAuth = 1 and WorkId ='{0}'", workId);
+                    using (SqlCommand cmd = new SqlCommand(sql, con))
+                    {
+                        con.Open();
+                        int count = int.Parse(cmd.ExecuteScalar().ToString());
+                        if (count > 0)
+                            bo = true;
+                    }
                 }
             }
-            return false;
+            catch (Exception)
+            {
+                bo = false;
+            }
+
+            return bo;
         }
 
         private void textBox_Click(object sender, EventArgs e)
