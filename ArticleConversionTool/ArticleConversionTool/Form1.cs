@@ -281,7 +281,13 @@ namespace ArticleConversionTool
                         con.Open();
                         int count = int.Parse(cmd.ExecuteScalar().ToString());
                         if (count > 0)
+                        {
                             bo = true;
+                            string currentTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                            sql = $"update MyWork set LastTime ='{currentTime}' where WorkId = '{workId}'";
+                            cmd.CommandText = sql;
+                            int res = cmd.ExecuteNonQuery();
+                        }
                     }
                 }
             }
@@ -425,16 +431,23 @@ namespace ArticleConversionTool
                     int index = 0;
                     foreach (Aspose.Words.Drawing.Shape item in shapes)
                     {
-                        if (item.HasImage)
+                        try
                         {
-                            //Document imgDoc = item.Document as Document;
-                            //builder = new DocumentBuilder(imgDoc);
+                            if (item.HasImage)
+                            {
+                                //Document imgDoc = item.Document as Document;
+                                //builder = new DocumentBuilder(imgDoc);
 
-                            //将光标移动到指定节点，移动到这个节点才可以把内容插入到这里
-                            builder.MoveTo(item);
-                            builder.Writeln(imgList[index]);
-                            item.Remove();
-                            index++;
+                                //将光标移动到指定节点，移动到这个节点才可以把内容插入到这里
+                                builder.MoveTo(item);
+                                builder.Writeln(imgList[index]);
+                                item.Remove();
+                                index++;
+                            }
+                        }
+                        catch (Exception ee)
+                        {
+                            myUtils.WriteLog("删除word中的图片出错：" + ee);
                         }
                     }
                     doc.Save(wordPath);
@@ -462,7 +475,8 @@ namespace ArticleConversionTool
                     myUtils.WriteLog(ex);
                     if (!Directory.Exists(errorFolder2))
                         Directory.CreateDirectory(errorFolder2);
-                    fileInfo.MoveTo(errorFolder2 + fileInfo.Name);
+                    if (File.Exists(errorFolder2 + fileInfo.Name))
+                        fileInfo.MoveTo(errorFolder2 + fileInfo.Name);
                 }
             }
             MessageBox.Show("htm已经转换完毕！", "Article Conversion Tool");
@@ -486,6 +500,15 @@ namespace ArticleConversionTool
                 fileInfo.CopyTo(newFullPath);
             }
             File.WriteAllText(parentPath + "内容.txt", newContent);
+            string fullWordPath = wordPath + @"\" + wordTitle + @".docx";
+            if (File.Exists(fullWordPath))
+                File.Delete(fullWordPath);
+            else
+            {
+                fullWordPath = wordPath + @"\" + wordTitle + @".doc";
+                if (File.Exists(fullWordPath))
+                    File.Delete(fullWordPath);
+            }
         }
 
         public void WordToHtm(string wordPath, string oldFolder, string wordTitle, List<string> imgPathList)
@@ -521,7 +544,7 @@ namespace ArticleConversionTool
             }
             HtmlNode divNode = doch.DocumentNode.SelectSingleNode("//div");
             string newHtmStr = divNode.InnerHtml;
-            File.WriteAllText(newHtmPath, newHtmStr,Encoding.GetEncoding("GB2312"));
+            File.WriteAllText(newHtmPath, newHtmStr, Encoding.GetEncoding("GB2312"));
         }
     }
 }

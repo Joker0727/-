@@ -11,9 +11,6 @@ E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debu
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csproj.CopyComplete
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.exe
 E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.pdb
-<<<<<<< HEAD
-E:\My\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csprojAssemblyReference.cache
-=======
 E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.exe.config
 E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.exe
 E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\bin\Debug\ArticleConversionTool.pdb
@@ -28,4 +25,3 @@ E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj
 E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.exe
 E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.pdb
 E:\Private\ArticleConversionTool\ArticleConversionTool\ArticleConversionTool\obj\Debug\ArticleConversionTool.csprojAssemblyReference.cache
->>>>>>> remotes/origin/master
